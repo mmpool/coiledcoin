@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 21 2009)
+// C++ code generated with wxFormBuilder (version Sep  8 2010)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -25,7 +25,7 @@ CMainFrameBase::CMainFrameBase( wxWindow* parent, wxWindowID id, const wxString&
 	m_menuFileExit = new wxMenuItem( m_menuFile, wxID_EXIT, wxString( _("E&xit") ) , wxEmptyString, wxITEM_NORMAL );
 	m_menuFile->Append( m_menuFileExit );
 	
-	m_menubar->Append( m_menuFile, _("&File") );
+	m_menubar->Append( m_menuFile, _("&File") ); 
 	
 	m_menuOptions = new wxMenu();
 	wxMenuItem* m_menuOptionsChangeYourAddress;
@@ -42,14 +42,14 @@ CMainFrameBase::CMainFrameBase( wxWindow* parent, wxWindowID id, const wxString&
 	m_menuOptionsOptions = new wxMenuItem( m_menuOptions, wxID_PREFERENCES, wxString( _("&Options...") ) , wxEmptyString, wxITEM_NORMAL );
 	m_menuOptions->Append( m_menuOptionsOptions );
 	
-	m_menubar->Append( m_menuOptions, _("&Settings") );
+	m_menubar->Append( m_menuOptions, _("&Settings") ); 
 	
 	m_menuHelp = new wxMenu();
 	wxMenuItem* m_menuHelpAbout;
 	m_menuHelpAbout = new wxMenuItem( m_menuHelp, wxID_ABOUT, wxString( _("&About...") ) , wxEmptyString, wxITEM_NORMAL );
 	m_menuHelp->Append( m_menuHelpAbout );
 	
-	m_menubar->Append( m_menuHelp, _("&Help") );
+	m_menubar->Append( m_menuHelp, _("&Help") ); 
 	
 	this->SetMenuBar( m_menubar );
 	
@@ -58,8 +58,8 @@ CMainFrameBase::CMainFrameBase( wxWindow* parent, wxWindowID id, const wxString&
 	m_toolBar->SetToolSeparation( 1 );
 	m_toolBar->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 90, false, wxEmptyString ) );
 	
-	m_toolBar->AddTool( wxID_BUTTONSEND, _("Send Coins"), wxBitmap( send20_xpm ), wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString );
-	m_toolBar->AddTool( wxID_BUTTONRECEIVE, _("Address Book"), wxBitmap( addressbook20_xpm ), wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString );
+	m_toolBar->AddTool( wxID_BUTTONSEND, _("Send Coins"), wxBitmap( send20_xpm ), wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString ); 
+	m_toolBar->AddTool( wxID_BUTTONRECEIVE, _("Address Book"), wxBitmap( addressbook20_xpm ), wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString ); 
 	m_toolBar->Realize();
 	
 	m_statusBar = this->CreateStatusBar( 1, wxST_SIZEGRIP, wxID_ANY );
@@ -72,7 +72,7 @@ CMainFrameBase::CMainFrameBase( wxWindow* parent, wxWindowID id, const wxString&
 	wxBoxSizer* bSizer85;
 	bSizer85 = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_staticText32 = new wxStaticText( this, wxID_ANY, _("Your Bitcoin Address:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText32 = new wxStaticText( this, wxID_ANY, _("Your CedarCoin Address:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText32->Wrap( -1 );
 	bSizer85->Add( m_staticText32, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 	
@@ -133,7 +133,7 @@ CMainFrameBase::CMainFrameBase( wxWindow* parent, wxWindowID id, const wxString&
 	m_panel9->SetSizer( bSizer11 );
 	m_panel9->Layout();
 	bSizer11->Fit( m_panel9 );
-	m_notebook->AddPage( m_panel9, _("All Transactions"), true );
+	m_notebook->AddPage( m_panel9, _("All Transactions"), false );
 	m_panel91 = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer111;
 	bSizer111 = new wxBoxSizer( wxVERTICAL );
@@ -155,7 +155,7 @@ CMainFrameBase::CMainFrameBase( wxWindow* parent, wxWindowID id, const wxString&
 	m_panel92->SetSizer( bSizer112 );
 	m_panel92->Layout();
 	bSizer112->Fit( m_panel92 );
-	m_notebook->AddPage( m_panel92, _("Sent"), false );
+	m_notebook->AddPage( m_panel92, _("Sent"), true );
 	m_panel93 = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer113;
 	bSizer113 = new wxBoxSizer( wxVERTICAL );
@@ -251,12 +251,12 @@ CMainFrameBase::~CMainFrameBase()
 	this->Disconnect( wxEVT_ENTER_WINDOW, wxMouseEventHandler( CMainFrameBase::OnMouseEvents ) );
 	this->Disconnect( wxEVT_MOUSEWHEEL, wxMouseEventHandler( CMainFrameBase::OnMouseEvents ) );
 	this->Disconnect( wxEVT_PAINT, wxPaintEventHandler( CMainFrameBase::OnPaint ) );
-	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CMainFrameBase::OnMenuFileExit ) );
+	this->Disconnect( wxID_EXIT, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CMainFrameBase::OnMenuFileExit ) );
 	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CMainFrameBase::OnMenuOptionsChangeYourAddress ) );
 	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CMainFrameBase::OnMenuOptionsEncryptWallet ) );
 	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CMainFrameBase::OnMenuOptionsChangeWalletPassphrase ) );
-	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CMainFrameBase::OnMenuOptionsOptions ) );
-	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CMainFrameBase::OnMenuHelpAbout ) );
+	this->Disconnect( wxID_PREFERENCES, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CMainFrameBase::OnMenuOptionsOptions ) );
+	this->Disconnect( wxID_ABOUT, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CMainFrameBase::OnMenuHelpAbout ) );
 	this->Disconnect( wxID_BUTTONSEND, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( CMainFrameBase::OnButtonSend ) );
 	this->Disconnect( wxID_BUTTONRECEIVE, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( CMainFrameBase::OnButtonAddressBook ) );
 	m_textCtrlAddress->Disconnect( wxEVT_KEY_DOWN, wxKeyEventHandler( CMainFrameBase::OnKeyDown ), NULL, this );
@@ -289,6 +289,7 @@ CMainFrameBase::~CMainFrameBase()
 	m_listCtrlReceived->Disconnect( wxEVT_COMMAND_LIST_COL_BEGIN_DRAG, wxListEventHandler( CMainFrameBase::OnListColBeginDrag ), NULL, this );
 	m_listCtrlReceived->Disconnect( wxEVT_COMMAND_LIST_ITEM_ACTIVATED, wxListEventHandler( CMainFrameBase::OnListItemActivated ), NULL, this );
 	m_listCtrlReceived->Disconnect( wxEVT_PAINT, wxPaintEventHandler( CMainFrameBase::OnPaintListCtrl ), NULL, this );
+	
 }
 
 CTxDetailsDialogBase::CTxDetailsDialogBase( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
@@ -325,6 +326,7 @@ CTxDetailsDialogBase::~CTxDetailsDialogBase()
 {
 	// Disconnect Events
 	m_buttonOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( CTxDetailsDialogBase::OnButtonOK ), NULL, this );
+	
 }
 
 COptionsDialogBase::COptionsDialogBase( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
@@ -352,7 +354,7 @@ COptionsDialogBase::COptionsDialogBase( wxWindow* parent, wxWindowID id, const w
 	
 	bSizer69->Add( 0, 16, 0, wxEXPAND, 5 );
 	
-	m_checkBoxStartOnSystemStartup = new wxCheckBox( m_panelMain, wxID_ANY, _("&Start Bitcoin on system startup"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkBoxStartOnSystemStartup = new wxCheckBox( m_panelMain, wxID_ANY, _("&Start CedarCoin on system startup"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer69->Add( m_checkBoxStartOnSystemStartup, 0, wxALL, 5 );
 	
 	m_checkBoxMinimizeToTray = new wxCheckBox( m_panelMain, wxID_ANY, _("&Minimize to the tray instead of the taskbar"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -488,6 +490,7 @@ COptionsDialogBase::~COptionsDialogBase()
 	m_buttonOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( COptionsDialogBase::OnButtonOK ), NULL, this );
 	m_buttonCancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( COptionsDialogBase::OnButtonCancel ), NULL, this );
 	m_buttonApply->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( COptionsDialogBase::OnButtonApply ), NULL, this );
+	
 }
 
 CAboutDialogBase::CAboutDialogBase( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
@@ -515,7 +518,7 @@ CAboutDialogBase::CAboutDialogBase( wxWindow* parent, wxWindowID id, const wxStr
 	wxBoxSizer* bSizer64;
 	bSizer64 = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_staticText40 = new wxStaticText( this, wxID_ANY, _("Bitcoin "), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText40 = new wxStaticText( this, wxID_ANY, _("CedarCoin "), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText40->Wrap( -1 );
 	m_staticText40->SetFont( wxFont( 10, 74, 90, 92, false, wxT("Tahoma") ) );
 	
@@ -567,6 +570,7 @@ CAboutDialogBase::~CAboutDialogBase()
 {
 	// Disconnect Events
 	m_buttonOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( CAboutDialogBase::OnButtonOK ), NULL, this );
+	
 }
 
 CSendDialogBase::CSendDialogBase( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
@@ -588,7 +592,7 @@ CSendDialogBase::CSendDialogBase( wxWindow* parent, wxWindowID id, const wxStrin
 	
 	fgSizer1->Add( 0, 0, 0, wxEXPAND, 5 );
 	
-	m_staticTextInstructions = new wxStaticText( this, wxID_ANY, _("Enter a Bitcoin address (e.g. 1NS17iag9jJgTHD1VXjvLCEnZuQ3rJDE9L)"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextInstructions = new wxStaticText( this, wxID_ANY, _("Enter a CedarCoin address (e.g. cNS17iag9jJgTHD1VXjvLCEnZuQ3rJDE9L)"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextInstructions->Wrap( -1 );
 	fgSizer1->Add( m_staticTextInstructions, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
@@ -705,6 +709,7 @@ CSendDialogBase::~CSendDialogBase()
 	m_textCtrlAmount->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( CSendDialogBase::OnKillFocusAmount ), NULL, this );
 	m_buttonSend->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( CSendDialogBase::OnButtonSend ), NULL, this );
 	m_buttonCancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( CSendDialogBase::OnButtonCancel ), NULL, this );
+	
 }
 
 CSendingDialogBase::CSendingDialogBase( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
@@ -756,6 +761,7 @@ CSendingDialogBase::~CSendingDialogBase()
 	this->Disconnect( wxEVT_PAINT, wxPaintEventHandler( CSendingDialogBase::OnPaint ) );
 	m_buttonOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( CSendingDialogBase::OnButtonOK ), NULL, this );
 	m_buttonCancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( CSendingDialogBase::OnButtonCancel ), NULL, this );
+	
 }
 
 CYourAddressDialogBase::CYourAddressDialogBase( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
@@ -768,7 +774,7 @@ CYourAddressDialogBase::CYourAddressDialogBase( wxWindow* parent, wxWindowID id,
 	
 	bSizer68->Add( 0, 5, 0, wxEXPAND, 5 );
 	
-	m_staticText45 = new wxStaticText( this, wxID_ANY, _("These are your Bitcoin addresses for receiving payments.  You may want to give a different one to each sender so you can keep track of who is paying you.  The highlighted address is displayed in the main window."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText45 = new wxStaticText( this, wxID_ANY, _("These are your CedarCoin addresses for receiving payments.  You may want to give a different one to each sender so you can keep track of who is paying you.  The highlighted address is displayed in the main window."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText45->Wrap( 590 );
 	bSizer68->Add( m_staticText45, 0, wxALL, 5 );
 	
@@ -827,6 +833,7 @@ CYourAddressDialogBase::~CYourAddressDialogBase()
 	m_buttonCopy->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( CYourAddressDialogBase::OnButtonCopy ), NULL, this );
 	m_buttonOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( CYourAddressDialogBase::OnButtonOK ), NULL, this );
 	m_buttonCancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( CYourAddressDialogBase::OnButtonCancel ), NULL, this );
+	
 }
 
 CAddressBookDialogBase::CAddressBookDialogBase( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
@@ -864,7 +871,7 @@ CAddressBookDialogBase::CAddressBookDialogBase( wxWindow* parent, wxWindowID id,
 	
 	bSizer681->Add( 0, 0, 0, wxEXPAND, 5 );
 	
-	m_staticText45 = new wxStaticText( m_panelReceiving, wxID_ANY, _("These are your Bitcoin addresses for receiving payments.  You can give a different one to each sender to keep track of who is paying you.  The highlighted address will be displayed in the main window."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText45 = new wxStaticText( m_panelReceiving, wxID_ANY, _("These are your CedarCoin addresses for receiving payments.  You can give a different one to each sender to keep track of who is paying you.  The highlighted address will be displayed in the main window."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText45->Wrap( 570 );
 	bSizer681->Add( m_staticText45, 0, wxTOP|wxRIGHT|wxLEFT, 6 );
 	
@@ -944,6 +951,7 @@ CAddressBookDialogBase::~CAddressBookDialogBase()
 	m_buttonNew->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( CAddressBookDialogBase::OnButtonNew ), NULL, this );
 	m_buttonOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( CAddressBookDialogBase::OnButtonOK ), NULL, this );
 	m_buttonCancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( CAddressBookDialogBase::OnButtonCancel ), NULL, this );
+	
 }
 
 CGetTextFromUserDialogBase::CGetTextFromUserDialogBase( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
@@ -1015,4 +1023,5 @@ CGetTextFromUserDialogBase::~CGetTextFromUserDialogBase()
 	m_textCtrl2->Disconnect( wxEVT_KEY_DOWN, wxKeyEventHandler( CGetTextFromUserDialogBase::OnKeyDown ), NULL, this );
 	m_buttonOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( CGetTextFromUserDialogBase::OnButtonOK ), NULL, this );
 	m_buttonCancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( CGetTextFromUserDialogBase::OnButtonCancel ), NULL, this );
+	
 }

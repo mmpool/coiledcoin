@@ -196,7 +196,7 @@ bool AppInit2(int argc, char* argv[])
             "  -testnet         \t\t  " + _("Use the test network\n") +
             "  -rpcuser=<user>  \t  "   + _("Username for JSON-RPC connections\n") +
             "  -rpcpassword=<pw>\t  "   + _("Password for JSON-RPC connections\n") +
-            "  -rpcport=<port>  \t\t  " + _("Listen for JSON-RPC connections on <port> (default: 8332)\n") +
+            "  -rpcport=<port>  \t\t  " + _("Listen for JSON-RPC connections on <port> (default: 8367)\n") +
             "  -rpcallowip=<ip> \t\t  " + _("Allow JSON-RPC connections from specified IP address\n") +
             "  -rpcconnect=<ip> \t  "   + _("Send commands to node running on <ip> (default: 127.0.0.1)\n") +
             "  -keypool=<n>     \t  "   + _("Set key pool size to <n> (default: 100)\n") +
@@ -216,7 +216,7 @@ bool AppInit2(int argc, char* argv[])
 
 #if defined(__WXMSW__) && defined(GUI)
         // Tabs make the columns line up in the message box
-        wxMessageBox(strUsage, "Bitcoin", wxOK);
+        wxMessageBox(strUsage, "CedarCoin", wxOK);
 #else
         // Remove tabs
         strUsage.erase(std::remove(strUsage.begin(), strUsage.end(), '\t'), strUsage.end());
@@ -321,7 +321,7 @@ bool AppInit2(int argc, char* argv[])
         loop
         {
             // Show the previous instance and exit
-            HWND hwndPrev = FindWindowA("wxWindowClassNR", "Bitcoin");
+            HWND hwndPrev = FindWindowA("wxWindowClassNR", "CedarCoin");
             if (hwndPrev)
             {
                 if (IsIconic(hwndPrev))
@@ -350,7 +350,7 @@ bool AppInit2(int argc, char* argv[])
     static boost::interprocess::file_lock lock(strLockFile.c_str());
     if (!lock.try_lock())
     {
-        wxMessageBox(strprintf(_("Cannot obtain a lock on data directory %s.  Bitcoin is probably already running."), GetDataDir().c_str()), "Bitcoin");
+        wxMessageBox(strprintf(_("Cannot obtain a lock on data directory %s.  Bitcoin is probably already running."), GetDataDir().c_str()), "CedarCoin");
         return false;
     }
 
@@ -360,7 +360,7 @@ bool AppInit2(int argc, char* argv[])
     {
         if (!BindListenPort(strErrors))
         {
-            wxMessageBox(strErrors, "Bitcoin");
+            wxMessageBox(strErrors, "CedarCoin");
             return false;
         }
     }
@@ -432,7 +432,7 @@ bool AppInit2(int argc, char* argv[])
 
     if (!strErrors.empty())
     {
-        wxMessageBox(strErrors, "Bitcoin", wxOK | wxICON_ERROR);
+        wxMessageBox(strErrors, "CedarCoin", wxOK | wxICON_ERROR);
         return false;
     }
 
@@ -486,7 +486,7 @@ bool AppInit2(int argc, char* argv[])
         addrProxy = CAddress(mapArgs["-proxy"]);
         if (!addrProxy.IsValid())
         {
-            wxMessageBox(_("Invalid -proxy address"), "Bitcoin");
+            wxMessageBox(_("Invalid -proxy address"), "CedarCoin");
             return false;
         }
     }
@@ -511,11 +511,11 @@ bool AppInit2(int argc, char* argv[])
     {
         if (!ParseMoney(mapArgs["-paytxfee"], nTransactionFee))
         {
-            wxMessageBox(_("Invalid amount for -paytxfee=<amount>"), "Bitcoin");
+            wxMessageBox(_("Invalid amount for -paytxfee=<amount>"), "CedarCoin");
             return false;
         }
         if (nTransactionFee > 0.25 * COIN)
-            wxMessageBox(_("Warning: -paytxfee is set very high.  This is the transaction fee you will pay if you send a transaction."), "Bitcoin", wxOK | wxICON_EXCLAMATION);
+            wxMessageBox(_("Warning: -paytxfee is set very high.  This is the transaction fee you will pay if you send a transaction."), "CedarCoin", wxOK | wxICON_EXCLAMATION);
     }
 
     if (fHaveUPnP)
@@ -543,7 +543,7 @@ bool AppInit2(int argc, char* argv[])
     RandAddSeedPerfmon();
 
     if (!CreateThread(StartNode, NULL))
-        wxMessageBox("Error: CreateThread(StartNode) failed", "Bitcoin");
+        wxMessageBox("Error: CreateThread(StartNode) failed", "CedarCoin");
 
     if (fServer)
         CreateThread(ThreadRPCServer, NULL);

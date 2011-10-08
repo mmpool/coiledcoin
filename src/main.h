@@ -27,7 +27,7 @@ class CRequestTracker;
 class CNode;
 class CBlockIndex;
 
-static const unsigned int MAX_BLOCK_SIZE = 1000000;
+static const unsigned int MAX_BLOCK_SIZE = 200000;
 static const unsigned int MAX_BLOCK_SIZE_GEN = MAX_BLOCK_SIZE/2;
 static const int MAX_BLOCK_SIGOPS = MAX_BLOCK_SIZE/50;
 static const int64 COIN = 100000000;
@@ -38,7 +38,7 @@ static const int64 MAX_MONEY = 21000000 * COIN;
 inline bool MoneyRange(int64 nValue) { return (nValue >= 0 && nValue <= MAX_MONEY); }
 static const int COINBASE_MATURITY = 100;
 // Threshold for nLockTime: below this value it is interpreted as block number, otherwise as UNIX timestamp.
-static const int LOCKTIME_THRESHOLD = 500000000; // Tue Nov  5 00:53:20 1985 UTC
+static const int LOCKTIME_THRESHOLD = 1000000000; // 9 September 2011
 #ifdef USE_UPNP
 static const int fHaveUPnP = true;
 #else

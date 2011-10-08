@@ -28,9 +28,9 @@ unsigned int nTransactionsUpdated = 0;
 map<COutPoint, CInPoint> mapNextTx;
 
 map<uint256, CBlockIndex*> mapBlockIndex;
-uint256 hashGenesisBlock("0x000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f");
+uint256 hashGenesisBlock("0x0000000005f87eef3f453fe26df50df6ce1f8102095d9cf4819212e7e4c48d89");
 static CBigNum bnProofOfWorkLimit(~uint256(0) >> 32);
-const int nTotalBlocksEstimate = 140700; // Conservative estimate of total nr of blocks on main chain
+const int nTotalBlocksEstimate = 0; // Conservative estimate of total nr of blocks on main chain
 const int nInitialBlockThreshold = 120; // Regard blocks up until N-threshold as "initial download"
 CBlockIndex* pindexGenesisBlock = NULL;
 int nBestHeight = -1;
@@ -653,8 +653,8 @@ int64 static GetBlockValue(int nHeight, int64 nFees)
 
 unsigned int static GetNextWorkRequired(const CBlockIndex* pindexLast)
 {
-    const int64 nTargetTimespan = 14 * 24 * 60 * 60; // two weeks
-    const int64 nTargetSpacing = 10 * 60;
+    const int64 nTargetTimespan = 24 * 60 * 60; // 24 hours
+    const int64 nTargetSpacing = 2 * 60;
     const int64 nInterval = nTargetTimespan / nTargetSpacing;
 
     // Genesis block
@@ -665,19 +665,20 @@ unsigned int static GetNextWorkRequired(const CBlockIndex* pindexLast)
     if ((pindexLast->nHeight+1) % nInterval != 0)
         return pindexLast->nBits;
 
-    // Go back by what we want to be 14 days worth of blocks
+    // Go back by what we want to be 24 hours worth of blocks
     const CBlockIndex* pindexFirst = pindexLast;
-    for (int i = 0; pindexFirst && i < nInterval-1; i++)
+    int64 nActualInterval = (pindexLast->nHeight+1) == nInterval ? nInterval - 1: nInterval;
+    for (int i = 0; pindexFirst && i < nActualInterval; i++)
         pindexFirst = pindexFirst->pprev;
     assert(pindexFirst);
 
     // Limit adjustment step
     int64 nActualTimespan = pindexLast->GetBlockTime() - pindexFirst->GetBlockTime();
     printf("  nActualTimespan = %"PRI64d"  before bounds\n", nActualTimespan);
-    if (nActualTimespan < nTargetTimespan/4)
-        nActualTimespan = nTargetTimespan/4;
-    if (nActualTimespan > nTargetTimespan*4)
-        nActualTimespan = nTargetTimespan*4;
+    if (nActualTimespan < nTargetTimespan/2)
+        nActualTimespan = nTargetTimespan/2;
+    if (nActualTimespan > nTargetTimespan*2)
+        nActualTimespan = nTargetTimespan*2;
 
     // Retarget
     CBigNum bnNew;
@@ -1398,7 +1399,7 @@ bool CheckDiskSpace(uint64 nAdditionalBytes)
         string strMessage = _("Warning: Disk space is low  ");
         strMiscWarning = strMessage;
         printf("*** %s\n", strMessage.c_str());
-        ThreadSafeMessageBox(strMessage, "Bitcoin", wxOK | wxICON_EXCLAMATION);
+        ThreadSafeMessageBox(strMessage, "CedarCoin", wxOK | wxICON_EXCLAMATION);
         CreateThread(Shutdown, NULL);
         return false;
     }
@@ -1482,21 +1483,21 @@ bool LoadBlockIndex(bool fAllowNew)
         //   vMerkleTree: 4a5e1e
 
         // Genesis block
-        const char* pszTimestamp = "The Times 03/Jan/2009 Chancellor on brink of second bailout for banks";
+        const char* pszTimestamp = "Cedrus atlantica";
         CTransaction txNew;
         txNew.vin.resize(1);
         txNew.vout.resize(1);
         txNew.vin[0].scriptSig = CScript() << 486604799 << CBigNum(4) << vector<unsigned char>((const unsigned char*)pszTimestamp, (const unsigned char*)pszTimestamp + strlen(pszTimestamp));
         txNew.vout[0].nValue = 50 * COIN;
-        txNew.vout[0].scriptPubKey = CScript() << ParseHex("04678afdb0fe5548271967f1a67130b7105cd6a828e03909a67962e0ea1f61deb649f6bc3f4cef38c4f35504e51ec112de5c384df7ba0b8d578a4c702b6bf11d5f") << OP_CHECKSIG;
+        txNew.vout[0].scriptPubKey = CScript() << ParseHex("0435ac1f8b9ad9c93a4154cb2e8273fb49351b4c0befce3ff9bf85468ee0167ad35fffc8057ddb3f7f591342aa174a2a2c370f9370aa7c607af6f387a399128930") << OP_CHECKSIG;
         CBlock block;
         block.vtx.push_back(txNew);
         block.hashPrevBlock = 0;
         block.hashMerkleRoot = block.BuildMerkleTree();
         block.nVersion = 1;
-        block.nTime    = 1231006505;
+        block.nTime    = 1316118362;
         block.nBits    = 0x1d00ffff;
-        block.nNonce   = 2083236893;
+        block.nNonce   = 0xa8f6383b;
 
         if (fTestNet)
         {
@@ -1509,7 +1510,7 @@ bool LoadBlockIndex(bool fAllowNew)
         printf("%s\n", block.GetHash().ToString().c_str());
         printf("%s\n", hashGenesisBlock.ToString().c_str());
         printf("%s\n", block.hashMerkleRoot.ToString().c_str());
-        assert(block.hashMerkleRoot == uint256("0x4a5e1e4baab89f3a32518a88c31bc87f618f76673e2cc77ab2127b7afdeda33b"));
+        assert(block.hashMerkleRoot == uint256("0x27c55a0fc0f928c076cc98478f05a7e91b049d27424d904496b8cfb3781b0bf1"));
         block.print();
         assert(block.GetHash() == hashGenesisBlock);
 
