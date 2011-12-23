@@ -1515,12 +1515,6 @@ bool VerifyScript(const CScript& scriptSig, const CScript& scriptPubKey, const C
         return false;
     bool fResult = CastToBool(stack.back());
 
-    // This code should be removed when a compatibility-breaking block chain split has passed.
-    // Special check for OP_EVAL backwards-compatibility: if scriptPubKey or scriptSig contains
-    // OP_EVAL, then result must be identical if OP_EVAL is treated as a no-op:
-    if (fResult && fStrictOpEval && (scriptPubKey.Find(OP_EVAL) || scriptSig.Find(OP_EVAL)))
-        return VerifyScript(scriptSig, scriptPubKey, txTo, nIn, nSigOpCountRet, nHashType, false);
-
     return fResult;
 }
 

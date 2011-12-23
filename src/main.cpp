@@ -1000,20 +1000,6 @@ bool CTransaction::ConnectInputs(map<uint256, pair<CTxIndex, CTransaction> > inp
             if (!(fBlock && IsInitialBlockDownload()))
             {
                 bool fStrictOpEval = true;
-                // This code should be removed when OP_EVAL has
-                // a majority of hashing power on the network.
-                if (fBlock)
-                {
-                    // To avoid being on the short end of a block-chain split,
-                    // interpret OP_EVAL as a NO_OP until blocks with timestamps
-                    // after opevaltime:
-                    int64 nEvalSwitchTime = GetArg("opevaltime", 1328054400); // Feb 1, 2012
-                    fStrictOpEval = (pindexBlock->nTime >= nEvalSwitchTime);
-                }
-                // if !fBlock, then always be strict-- don't accept
-                // invalid-under-new-rules OP_EVAL transactions into
-                // our memory pool (don't relay them, don't include them
-                // in blocks we mine).
 
                 // Verify signature
                 if (!VerifySignature(txPrev, *this, i, nSigOpsRet, fStrictOpEval))
@@ -3105,12 +3091,6 @@ void IncrementExtraNonce(CBlock* pblock, CBlockIndex* pindexPrev, unsigned int& 
     }
     ++nExtraNonce;
     pblock->vtx[0].vin[0].scriptSig = CScript() << pblock->nTime << CBigNum(nExtraNonce);
-
-    // Put "OP_EVAL" in the coinbase so everybody can tell when
-    // a majority of miners support it
-    const char* pOpEvalName = GetOpName(OP_EVAL);
-    pblock->vtx[0].vin[0].scriptSig += CScript() << std::vector<unsigned char>(pOpEvalName, pOpEvalName+strlen(pOpEvalName));
-    assert(pblock->vtx[0].vin[0].scriptSig.size() <= 100);
 
     pblock->hashMerkleRoot = pblock->BuildMerkleTree();
 }
