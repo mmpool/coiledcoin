@@ -39,6 +39,7 @@ LIBS+= \
 DEBUGFLAGS=-g -D__WXDEBUG__
 CXXFLAGS=-O2 -Wno-invalid-offsetof -Wformat $(DEBUGFLAGS) $(DEFS)
 HEADERS = \
+    auxpow.h \
     base58.h \
     bignum.h \
     crypter.h \
@@ -63,6 +64,7 @@ HEADERS = \
     wallet.h
 
 OBJS= \
+    obj/auxpow.o \
     obj/crypter.o \
     obj/db.o \
     obj/init.o \
