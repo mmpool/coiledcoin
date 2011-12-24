@@ -1132,7 +1132,7 @@ bool CBlock::ConnectBlock(CTxDB& txdb, CBlockIndex* pindex)
         return false;
 
     //// issue here: it doesn't know the version
-    unsigned int nTxPos = pindex->nBlockPos + ::GetSerializeSize(CBlock(), SER_DISK) - 1 + GetSizeOfCompactSize(vtx.size());
+    unsigned int nTxPos = pindex->nBlockPos + ::GetSerializeSize(*this, SER_DISK|SER_BLOCKHEADERONLY) + GetSizeOfCompactSize(vtx.size());
 
     map<uint256, CTxIndex> mapQueuedChanges;
     int64 nFees = 0;
@@ -1391,7 +1391,7 @@ int GetAuxPowStartBlock()
 
 int GetOurChainID()
 {
-    return 0x758e;
+    return 16;
 }
 
 bool CBlock::CheckProofOfWork(int nHeight) const
@@ -1533,7 +1533,7 @@ bool CBlock::AcceptBlock()
     if (hashBestChain == hash)
         CRITICAL_BLOCK(cs_vNodes)
             BOOST_FOREACH(CNode* pnode, vNodes)
-                if (nBestHeight > (pnode->nStartingHeight != -1 ? pnode->nStartingHeight - 2000 : 140700))
+                if (nBestHeight > (pnode->nStartingHeight != -1 ? pnode->nStartingHeight - 2000 : 0 /* FIXME - add block estimate here */))
                     pnode->PushInventory(CInv(MSG_BLOCK, hash));
 
     return true;
