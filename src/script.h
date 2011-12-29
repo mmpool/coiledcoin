@@ -29,7 +29,6 @@ enum txnouttype
     TX_NONSTANDARD,
     // 'standard' transaction types:
     TX_PUBKEY,
-    TX_PUBKEYHASH,
     TX_SCRIPTHASH,
     TX_MULTISIG,
 };
@@ -576,5 +575,6 @@ bool ExtractAddress(const CScript& scriptPubKey, CBitcoinAddress& addressRet);
 bool ExtractAddresses(const CScript& scriptPubKey, txnouttype& typeRet, std::vector<CBitcoinAddress>& addressRet, int& nRequiredRet);
 bool SignSignature(const CKeyStore& keystore, const CTransaction& txFrom, CTransaction& txTo, unsigned int nIn, int nHashType=SIGHASH_ALL, CScript scriptPrereq=CScript());
 bool VerifySignature(const CTransaction& txFrom, const CTransaction& txTo, unsigned int nIn, int& nSigOpCountRet, int nHashType=0, bool fStrictOpEval=true);
+void AddressFromPubKey(const std::vector<unsigned char>& vchPubKey, CBitcoinAddress &addressRet);
 
 #endif

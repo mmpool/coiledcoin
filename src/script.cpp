@@ -76,7 +76,6 @@ const char* GetTxnOutputType(txnouttype t)
     {
     case TX_NONSTANDARD: return "nonstandard";
     case TX_PUBKEY: return "pubkey";
-    case TX_PUBKEYHASH: return "pubkeyhash";
     case TX_SCRIPTHASH: return "scripthash";
     case TX_MULTISIG: return "multisig";
     }
@@ -1181,9 +1180,6 @@ bool Solver(const CScript& scriptPubKey, txnouttype& typeRet, vector<vector<unsi
         // Standard tx, sender provides pubkey, receiver adds signature
         mTemplates.insert(make_pair(TX_PUBKEY, CScript() << OP_PUBKEY << OP_CHECKSIG));
 
-        // Bitcoin address tx, sender provides hash of pubkey, receiver provides signature and pubkey
-        mTemplates.insert(make_pair(TX_PUBKEYHASH, CScript() << OP_DUP << OP_HASH160 << OP_PUBKEYHASH << OP_EQUALVERIFY << OP_CHECKSIG));
-
         // Sender provides N pubkeys, receivers provides M signatures
         mTemplates.insert(make_pair(TX_MULTISIG, CScript() << OP_SMALLINTEGER << OP_PUBKEYS << OP_SMALLINTEGER << OP_CHECKMULTISIG));
 
@@ -1340,17 +1336,6 @@ bool Solver(const CKeyStore& keystore, const CScript& scriptPubKey, uint256 hash
     case TX_PUBKEY:
         address.SetPubKey(vSolutions[0]);
         return Sign1(address, keystore, hash, nHashType, scriptSigRet);
-    case TX_PUBKEYHASH:
-        address.SetHash160(uint160(vSolutions[0]));
-        if (!Sign1(address, keystore, hash, nHashType, scriptSigRet))
-            return false;
-        else
-        {
-            valtype vch;
-            keystore.GetPubKey(address, vch);
-            scriptSigRet << vch;
-        }
-        break;
     case TX_SCRIPTHASH:
         if (!keystore.GetCScript(uint160(vSolutions[0]), subscript))
             return false;
@@ -1418,9 +1403,6 @@ bool IsMine(const CKeyStore &keystore, const CScript& scriptPubKey)
     case TX_PUBKEY:
         address.SetPubKey(vSolutions[0]);
         return keystore.HaveKey(address);
-    case TX_PUBKEYHASH:
-        address.SetHash160(uint160(vSolutions[0]));
-        return keystore.HaveKey(address);
     case TX_SCRIPTHASH:
     {
         CScript subscript;
@@ -1452,11 +1434,6 @@ bool ExtractAddress(const CScript& scriptPubKey, CBitcoinAddress& addressRet)
     if (whichType == TX_PUBKEY)
     {
         addressRet.SetPubKey(vSolutions[0]);
-        return true;
-    }
-    else if (whichType == TX_PUBKEYHASH)
-    {
-        addressRet.SetHash160(uint160(vSolutions[0]));
         return true;
     }
     else if (whichType == TX_SCRIPTHASH)
@@ -1491,9 +1468,7 @@ bool ExtractAddresses(const CScript& scriptPubKey, txnouttype& typeRet, vector<C
     {
         nRequiredRet = 1;
         CBitcoinAddress address;
-        if (typeRet == TX_PUBKEYHASH)
-            address.SetHash160(uint160(vSolutions.front()));
-        else if (typeRet == TX_SCRIPTHASH)
+        if (typeRet == TX_SCRIPTHASH)
             address.SetScriptHash160(uint160(vSolutions.front()));
         else if (typeRet == TX_PUBKEY)
             address.SetPubKey(vSolutions.front());
@@ -1561,6 +1536,14 @@ bool VerifySignature(const CTransaction& txFrom, const CTransaction& txTo, unsig
 
     return true;
 }
+
+void AddressFromPubKey(const std::vector<unsigned char>& vchPubKey, CBitcoinAddress &addressRet)
+{
+    CScript inner;
+    inner << vchPubKey << OP_CHECKSIG;
+    addressRet.SetScriptHash160(Hash160(inner));
+}
+
 
 void CScript::SetBitcoinAddress(const CBitcoinAddress& address)
 {

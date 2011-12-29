@@ -22,6 +22,9 @@
 
 static const char* pszBase58 = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
 
+class CBitcoinAddress;
+extern void AddressFromPubKey(const std::vector<unsigned char>& vchPubKey, CBitcoinAddress &addressRet);
+
 // Encode a byte sequence as a base58-encoded string
 inline std::string EncodeBase58(const unsigned char* pbegin, const unsigned char* pend)
 {
@@ -262,21 +265,13 @@ class CBitcoinAddress : public CBase58Data
 public:
     enum
     {
-        PUBKEY_ADDRESS = 88,
-        SCRIPT_ADDRESS = 89,
-        PUBKEY_ADDRESS_TEST = 188,
-        SCRIPT_ADDRESS_TEST = 189,
+        SCRIPT_ADDRESS = 88,
+        SCRIPT_ADDRESS_TEST = 188,
     };
-
-    bool SetHash160(const uint160& hash160)
-    {
-        SetData(fTestNet ? PUBKEY_ADDRESS_TEST : PUBKEY_ADDRESS, &hash160, 20);
-        return true;
-    }
 
     void SetPubKey(const std::vector<unsigned char>& vchPubKey)
     {
-        SetHash160(Hash160(vchPubKey));
+        AddressFromPubKey(vchPubKey, *this);
     }
 
     bool SetScriptHash160(const uint160& hash160)
@@ -291,19 +286,11 @@ public:
         bool fExpectTestNet = false;
         switch(nVersion)
         {
-            case PUBKEY_ADDRESS:
-                nExpectedSize = 20; // Hash of public key
-                fExpectTestNet = false;
-                break;
             case SCRIPT_ADDRESS:
                 nExpectedSize = 20; // OP_EVAL, hash of CScript
                 fExpectTestNet = false;
                 break;
 
-            case PUBKEY_ADDRESS_TEST:
-                nExpectedSize = 20;
-                fExpectTestNet = true;
-                break;
             case SCRIPT_ADDRESS_TEST:
                 nExpectedSize = 20;
                 fExpectTestNet = true;
@@ -325,11 +312,6 @@ public:
 
     CBitcoinAddress()
     {
-    }
-
-    CBitcoinAddress(uint160 hash160In)
-    {
-        SetHash160(hash160In);
     }
 
     CBitcoinAddress(const std::vector<unsigned char>& vchPubKey)

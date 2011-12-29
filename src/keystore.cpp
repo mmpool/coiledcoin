@@ -44,8 +44,11 @@ bool CBasicKeyStore::AddCScript(const uint160 &hash, const CScript& redeemScript
 bool CBasicKeyStore::HaveCScript(const uint160& hash) const
 {
     bool result;
+    CBitcoinAddress address;
+    std::vector<unsigned char> vchPubKey;
+    address.SetScriptHash160(hash);
     CRITICAL_BLOCK(cs_KeyStore)
-        result = (mapScripts.count(hash) > 0);
+        result = (mapScripts.count(hash) > 0) || GetPubKey(address, vchPubKey);
     return result;
 }
 
@@ -58,6 +61,16 @@ bool CBasicKeyStore::GetCScript(const uint160 &hash, CScript& redeemScriptOut) c
         if (mi != mapScripts.end())
         {
             redeemScriptOut = (*mi).second;
+            return true;
+        }
+        else 
+        {
+            CBitcoinAddress address;
+            std::vector<unsigned char> vchPubKey;
+            address.SetScriptHash160(hash);
+            if(!GetPubKey(address, vchPubKey))
+                return false;
+            redeemScriptOut = CScript() << vchPubKey << OP_CHECKSIG;
             return true;
         }
     }
