@@ -66,6 +66,7 @@ public:
         pkey = EC_KEY_new_by_curve_name(NID_secp256k1);
         if (pkey == NULL)
             throw key_error("CKey::CKey() : EC_KEY_new_by_curve_name failed");
+        EC_KEY_set_conv_form(pkey, POINT_CONVERSION_COMPRESSED);
         fSet = false;
     }
 
@@ -74,6 +75,7 @@ public:
         pkey = EC_KEY_dup(b.pkey);
         if (pkey == NULL)
             throw key_error("CKey::CKey(const CKey&) : EC_KEY_dup failed");
+        EC_KEY_set_conv_form(pkey, POINT_CONVERSION_COMPRESSED);
         fSet = b.fSet;
     }
 
@@ -99,6 +101,7 @@ public:
     {
         if (!EC_KEY_generate_key(pkey))
             throw key_error("CKey::MakeNewKey() : EC_KEY_generate_key failed");
+        EC_KEY_set_conv_form(pkey, POINT_CONVERSION_COMPRESSED);
         fSet = true;
     }
 
@@ -108,6 +111,7 @@ public:
         if (!d2i_ECPrivateKey(&pkey, &pbegin, vchPrivKey.size()))
             return false;
         fSet = true;
+        EC_KEY_set_conv_form(pkey, POINT_CONVERSION_COMPRESSED);
         return true;
     }
 
@@ -126,6 +130,7 @@ public:
             throw key_error("CKey::SetSecret() : EC_KEY_regenerate_key failed");
         BN_clear_free(bn);
         fSet = true;
+        EC_KEY_set_conv_form(pkey, POINT_CONVERSION_COMPRESSED);
         return true;
     }
 
@@ -221,7 +226,7 @@ public:
             if (nRecId == -1)
                 throw key_error("CKey::SignCompact() : unable to construct recoverable key");
 
-            vchSig[0] = nRecId+27;
+            vchSig[0] = nRecId+31;
             BN_bn2bin(sig->r,&vchSig[33-(nBitsR+7)/8]);
             BN_bn2bin(sig->s,&vchSig[65-(nBitsS+7)/8]);
             fOk = true;
@@ -238,7 +243,7 @@ public:
     {
         if (vchSig.size() != 65)
             return false;
-        if (vchSig[0]<27 || vchSig[0]>=31)
+        if (vchSig[0]<31 || vchSig[0]>=35)
             return false;
         ECDSA_SIG *sig = ECDSA_SIG_new();
         BN_bin2bn(&vchSig[1],32,sig->r);
@@ -246,7 +251,8 @@ public:
 
         EC_KEY_free(pkey);
         pkey = EC_KEY_new_by_curve_name(NID_secp256k1);
-        if (ECDSA_SIG_recover_key_GFp(pkey, sig, (unsigned char*)&hash, sizeof(hash), vchSig[0] - 27, 0) == 1)
+        EC_KEY_set_conv_form(pkey, POINT_CONVERSION_COMPRESSED);
+        if (ECDSA_SIG_recover_key_GFp(pkey, sig, (unsigned char*)&hash, sizeof(hash), vchSig[0] - 31, 0) == 1)
         {
             fSet = true;
             ECDSA_SIG_free(sig);
