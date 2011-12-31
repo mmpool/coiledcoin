@@ -177,7 +177,7 @@ enum opcodetype
     OP_SMALLINTEGER = 0xfa,
     OP_PUBKEYS = 0xfb,
     OP_SCRIPTHASH = 0xfc,
-    OP_PUBKEYHASH = 0xfd,
+    // OP_PUBKEYHASH = 0xfd, // not used
     OP_PUBKEY = 0xfe,
 
     OP_INVALIDOPCODE = 0xff,

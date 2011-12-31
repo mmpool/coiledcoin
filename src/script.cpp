@@ -220,7 +220,6 @@ const char* GetOpName(opcodetype opcode)
 
     // template matching params
     case OP_SCRIPTHASH             : return "OP_SCRIPTHASH";
-    case OP_PUBKEYHASH             : return "OP_PUBKEYHASH";
     case OP_PUBKEY                 : return "OP_PUBKEY";
 
     case OP_INVALIDOPCODE          : return "OP_INVALIDOPCODE";
@@ -1240,12 +1239,6 @@ bool Solver(const CScript& scriptPubKey, txnouttype& typeRet, vector<vector<unsi
             if (opcode2 == OP_PUBKEY)
             {
                 if (vch1.size() < 33 || vch1.size() > 120)
-                    break;
-                vSolutionsRet.push_back(vch1);
-            }
-            else if (opcode2 == OP_PUBKEYHASH)
-            {
-                if (vch1.size() != sizeof(uint160))
                     break;
                 vSolutionsRet.push_back(vch1);
             }
