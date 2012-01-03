@@ -345,13 +345,13 @@ void ThreadIRCSeed2(void* parg)
         }
         
         if (fTestNet) {
-            Send(hSocket, "JOIN #cedarcoinTEST\r");
-            Send(hSocket, "WHO #cedarcoinTEST\r");
+            Send(hSocket, "JOIN #coiledcoinTEST\r");
+            Send(hSocket, "WHO #coiledcoinTEST\r");
         } else {
-            // randomly join #cedarcoin00-#cedarcoin04
+            // randomly join #coiledcoin00-#coiledcoin04
             int channel_number = GetRandInt(5);
-            Send(hSocket, strprintf("JOIN #cedarcoin%02d\r", channel_number).c_str());
-            Send(hSocket, strprintf("WHO #cedarcoin%02d\r", channel_number).c_str());
+            Send(hSocket, strprintf("JOIN #coiledcoin%02d\r", channel_number).c_str());
+            Send(hSocket, strprintf("WHO #coiledcoin%02d\r", channel_number).c_str());
         }
 
         int64 nStart = GetTime();

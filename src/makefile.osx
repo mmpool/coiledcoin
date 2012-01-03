@@ -3,7 +3,7 @@
 # Distributed under the MIT/X11 software license, see the accompanying
 # file license.txt or http://www.opensource.org/licenses/mit-license.php.
 
-# Mac OS X makefile for cedarcoin
+# Mac OS X makefile for coiledcoin
 # Originally by Laszlo Hanyecz (solar@heliacal.net)
 
 CXX=llvm-g++
@@ -101,7 +101,7 @@ ifdef USE_QRCODE
 	LIBS += -lqrencode
 endif
 
-all: cedarcoind
+all: coiledcoind
 
 # auto-generated dependencies:
 -include obj/nogui/*.P
@@ -114,7 +114,7 @@ obj/nogui/%.o: %.cpp
 	      -e '/^$$/ d' -e 's/$$/ :/' < $(@:%.o=%.d) >> $(@:%.o=%.P); \
 	  rm -f $(@:%.o=%.d)
 
-cedarcoind: $(OBJS:obj/%=obj/nogui/%)
+coiledcoind: $(OBJS:obj/%=obj/nogui/%)
 	$(CXX) $(CFLAGS) -o $@ $(LIBPATHS) $^ $(LIBS)
 
 TESTOBJS := $(patsubst test/%.cpp,obj/test/%.o,$(wildcard test/*.cpp))
@@ -130,7 +130,7 @@ test_bitcoin: $(TESTOBJS) $(filter-out obj/nogui/init.o,$(OBJS:obj/%=obj/nogui/%
 	$(CXX) $(CFLAGS) -o $@ $(LIBPATHS) $^ $(LIBS) $(DEPSDIR)/lib/libboost_unit_test_framework-mt.a
 
 clean:
-	-rm -f cedarcoin cedarcoind test_bitcoin
+	-rm -f coiledcoin coiledcoind test_bitcoin
 	-rm -f obj/*.o
 	-rm -f obj/nogui/*.o
 	-rm -f obj/test/*.o

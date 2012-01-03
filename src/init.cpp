@@ -64,7 +64,7 @@ void Shutdown(void* parg)
         delete pwalletMain;
         CreateThread(ExitTimeout, NULL);
         Sleep(50);
-        printf("Bitcoin exiting\n\n");
+        printf("Coiledcoin exiting\n\n");
         fExit = true;
         exit(0);
     }
@@ -174,15 +174,15 @@ bool AppInit2(int argc, char* argv[])
     if (mapArgs.count("-?") || mapArgs.count("--help"))
     {
         string strUsage = string() +
-          _("Bitcoin version") + " " + FormatFullVersion() + "\n\n" +
+          _("Coiledcoin version") + " " + FormatFullVersion() + "\n\n" +
           _("Usage:") + "\t\t\t\t\t\t\t\t\t\t\n" +
-            "  bitcoind [options]                   \t  " + "\n" +
-            "  bitcoind [options] <command> [params]\t  " + _("Send command to -server or bitcoind") + "\n" +
-            "  bitcoind [options] help              \t\t  " + _("List commands") + "\n" +
-            "  bitcoind [options] help <command>    \t\t  " + _("Get help for a command") + "\n" +
+            "  coiledcoind [options]                   \t  " + "\n" +
+            "  coiledcoind [options] <command> [params]\t  " + _("Send command to -server or coiledcoind") + "\n" +
+            "  coiledcoind [options] help              \t\t  " + _("List commands") + "\n" +
+            "  coiledcoind [options] help <command>    \t\t  " + _("Get help for a command") + "\n" +
           _("Options:") + "\n" +
-            "  -conf=<file>     \t\t  " + _("Specify configuration file (default: bitcoin.conf)") + "\n" +
-            "  -pid=<file>      \t\t  " + _("Specify pid file (default: bitcoind.pid)") + "\n" +
+            "  -conf=<file>     \t\t  " + _("Specify configuration file (default: coiledcoin.conf)") + "\n" +
+            "  -pid=<file>      \t\t  " + _("Specify pid file (default: coiledcoind.pid)") + "\n" +
             "  -gen             \t\t  " + _("Generate coins") + "\n" +
             "  -gen=0           \t\t  " + _("Don't generate coins") + "\n" +
             "  -min             \t\t  " + _("Start minimized") + "\n" +
@@ -190,7 +190,7 @@ bool AppInit2(int argc, char* argv[])
             "  -timeout=<n>     \t  "   + _("Specify connection timeout (in milliseconds)") + "\n" +
             "  -proxy=<ip:port> \t  "   + _("Connect through socks4 proxy") + "\n" +
             "  -dns             \t  "   + _("Allow DNS lookups for addnode and connect") + "\n" +
-            "  -port=<port>     \t\t  " + _("Listen for connections on <port> (default: 8333 or testnet: 18333)") + "\n" +
+            "  -port=<port>     \t\t  " + _("Listen for connections on <port> (default: 8368 or testnet: 18368)") + "\n" +
             "  -maxconnections=<n>\t  " + _("Maintain at most <n> connections to peers (default: 125)") + "\n" +
             "  -addnode=<ip>    \t  "   + _("Add a node to connect to") + "\n" +
             "  -connect=<ip>    \t\t  " + _("Connect only to the specified node") + "\n" +
@@ -310,7 +310,7 @@ bool AppInit2(int argc, char* argv[])
     if (!fDebug && !pszSetDataDir[0])
         ShrinkDebugFile();
     printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
-    printf("Bitcoin version %s\n", FormatFullVersion().c_str());
+    printf("Coiledcoin version %s\n", FormatFullVersion().c_str());
     printf("Default data directory %s\n", GetDefaultDataDir().c_str());
 
     if (GetBoolArg("-loadblockindextest"))
@@ -328,7 +328,7 @@ bool AppInit2(int argc, char* argv[])
     static boost::interprocess::file_lock lock(strLockFile.c_str());
     if (!lock.try_lock())
     {
-        wxMessageBox(strprintf(_("Cannot obtain a lock on data directory %s.  Bitcoin is probably already running."), GetDataDir().c_str()), "CedarCoin");
+        wxMessageBox(strprintf(_("Cannot obtain a lock on data directory %s.  Coiledcoin is probably already running."), GetDataDir().c_str()), "Coiledcoin");
         return false;
     }
 
@@ -338,7 +338,7 @@ bool AppInit2(int argc, char* argv[])
         std::string strError;
         if (!BindListenPort(strError))
         {
-            wxMessageBox(strError, "CedarCoin");
+            wxMessageBox(strError, "Coiledcoin");
             return false;
         }
     }
@@ -348,7 +348,7 @@ bool AppInit2(int argc, char* argv[])
     // Load data files
     //
     if (fDaemon)
-        fprintf(stdout, "cedarcoin server starting\n");
+        fprintf(stdout, "coiledcoin server starting\n");
     int64 nStart;
 
     InitMessage(_("Loading addresses..."));
@@ -376,10 +376,10 @@ bool AppInit2(int argc, char* argv[])
         if (nLoadWalletRet == DB_CORRUPT)
             strErrors << _("Error loading wallet.dat: Wallet corrupted") << "\n";
         else if (nLoadWalletRet == DB_TOO_NEW)
-            strErrors << _("Error loading wallet.dat: Wallet requires newer version of Bitcoin") << "\n";
+            strErrors << _("Error loading wallet.dat: Wallet requires newer version of Coiledcoin") << "\n";
         else if (nLoadWalletRet == DB_NEED_REWRITE)
         {
-            strErrors << _("Wallet needed to be rewritten: restart Bitcoin to complete") << "\n";
+            strErrors << _("Wallet needed to be rewritten: restart Coiledcoin to complete") << "\n";
             wxMessageBox(strErrors.str(), "Bitcoin", wxOK | wxICON_ERROR);
             return false;
         }
@@ -421,7 +421,7 @@ bool AppInit2(int argc, char* argv[])
 
     if (!strErrors.str().empty())
     {
-        wxMessageBox(strErrors.str(), "CedarCoin", wxOK | wxICON_ERROR);
+        wxMessageBox(strErrors.str(), "Coiledcoin", wxOK | wxICON_ERROR);
         return false;
     }
 
@@ -475,7 +475,7 @@ bool AppInit2(int argc, char* argv[])
         addrProxy = CAddress(mapArgs["-proxy"]);
         if (!addrProxy.IsValid())
         {
-            wxMessageBox(_("Invalid -proxy address"), "CedarCoin");
+            wxMessageBox(_("Invalid -proxy address"), "Coiledcoin");
             return false;
         }
     }
@@ -495,11 +495,11 @@ bool AppInit2(int argc, char* argv[])
     {
         if (!ParseMoney(mapArgs["-paytxfee"], nTransactionFee))
         {
-            wxMessageBox(_("Invalid amount for -paytxfee=<amount>"), "CedarCoin");
+            wxMessageBox(_("Invalid amount for -paytxfee=<amount>"), "Coiledcoin");
             return false;
         }
         if (nTransactionFee > 0.25 * COIN)
-            wxMessageBox(_("Warning: -paytxfee is set very high.  This is the transaction fee you will pay if you send a transaction."), "CedarCoin", wxOK | wxICON_EXCLAMATION);
+            wxMessageBox(_("Warning: -paytxfee is set very high.  This is the transaction fee you will pay if you send a transaction."), "Coiledcoin", wxOK | wxICON_EXCLAMATION);
     }
 
     if (fHaveUPnP)
@@ -522,7 +522,7 @@ bool AppInit2(int argc, char* argv[])
     RandAddSeedPerfmon();
 
     if (!CreateThread(StartNode, NULL))
-        wxMessageBox(_("Error: CreateThread(StartNode) failed"), "CedarCoin");
+        wxMessageBox(_("Error: CreateThread(StartNode) failed"), "Coiledcoin");
 
     if (fServer)
         CreateThread(ThreadRPCServer, NULL);
@@ -543,7 +543,7 @@ bool AppInit2(int argc, char* argv[])
 #ifdef WIN32
 string StartupShortcutPath()
 {
-    return MyGetSpecialFolderPath(CSIDL_STARTUP, true) + "\\Bitcoin.lnk";
+    return MyGetSpecialFolderPath(CSIDL_STARTUP, true) + "\\Coiledcoin.lnk";
 }
 
 bool GetStartOnSystemStartup()
@@ -624,7 +624,7 @@ boost::filesystem::path GetAutostartDir()
 
 boost::filesystem::path GetAutostartFilePath()
 {
-    return GetAutostartDir() / boost::filesystem::path("bitcoin.desktop");
+    return GetAutostartDir() / boost::filesystem::path("coiledcoin.desktop");
 }
 
 bool GetStartOnSystemStartup()
@@ -668,10 +668,10 @@ bool SetStartOnSystemStartup(bool fAutoStart)
         boost::filesystem::ofstream optionFile(GetAutostartFilePath(), ios_base::out|ios_base::trunc);
         if (!optionFile.good())
             return false;
-        // Write a bitcoin.desktop file to the autostart directory:
+        // Write a coiledcoin.desktop file to the autostart directory:
         optionFile << "[Desktop Entry]\n";
         optionFile << "Type=Application\n";
-        optionFile << "Name=Bitcoin\n";
+        optionFile << "Name=Coiledcoin\n";
         optionFile << "Exec=" << pszExePath << " -min\n";
         optionFile << "Terminal=false\n";
         optionFile << "Hidden=false\n";

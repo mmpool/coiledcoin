@@ -167,8 +167,8 @@ MainOptionsPage::MainOptionsPage(QWidget *parent):
 {
     QVBoxLayout *layout = new QVBoxLayout();
 
-    bitcoin_at_startup = new QCheckBox(tr("&Start Bitcoin on window system startup"));
-    bitcoin_at_startup->setToolTip(tr("Automatically start Bitcoin after the computer is turned on"));
+    bitcoin_at_startup = new QCheckBox(tr("&Start Coiledcoin on window system startup"));
+    bitcoin_at_startup->setToolTip(tr("Automatically start Coiledcoin after the computer is turned on"));
     layout->addWidget(bitcoin_at_startup);
 
 #ifndef Q_WS_MAC
@@ -178,7 +178,7 @@ MainOptionsPage::MainOptionsPage(QWidget *parent):
 #endif
 
     map_port_upnp = new QCheckBox(tr("Map port using &UPnP"));
-    map_port_upnp->setToolTip(tr("Automatically open the Bitcoin client port on the router. This only works when your router supports UPnP and it is enabled."));
+    map_port_upnp->setToolTip(tr("Automatically open the Coiledcoin client port on the router. This only works when your router supports UPnP and it is enabled."));
     layout->addWidget(map_port_upnp);
 
 #ifndef Q_WS_MAC

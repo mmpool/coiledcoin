@@ -654,7 +654,7 @@ void FormatException(char* pszMessage, std::exception* pex, const char* pszThrea
     pszModule[0] = '\0';
     GetModuleFileNameA(NULL, pszModule, sizeof(pszModule));
 #else
-    const char* pszModule = "cedarcoin";
+    const char* pszModule = "coiledcoin";
 #endif
     if (pex)
         snprintf(pszMessage, 1000,
@@ -688,7 +688,7 @@ void ThreadOneMessageBox(string strMessage)
     if (fMessageBoxOpen)
         return;
     fMessageBoxOpen = true;
-    ThreadSafeMessageBox(strMessage, "CedarCoin", wxOK | wxICON_EXCLAMATION);
+    ThreadSafeMessageBox(strMessage, "Coiledcoin", wxOK | wxICON_EXCLAMATION);
     fMessageBoxOpen = false;
 }
 
@@ -746,12 +746,12 @@ string MyGetSpecialFolderPath(int nFolder, bool fCreate)
 
 string GetDefaultDataDir()
 {
-    // Windows: C:\Documents and Settings\username\Application Data\CedarCoin
-    // Mac: ~/Library/Application Support/CedarCoin
-    // Unix: ~/.cedarcoin
+    // Windows: C:\Documents and Settings\username\Application Data\Coiledcoin
+    // Mac: ~/Library/Application Support/Coiledcoin
+    // Unix: ~/.coiledcoin
 #ifdef WIN32
     // Windows
-    return MyGetSpecialFolderPath(CSIDL_APPDATA, true) + "\\CedarCoin";
+    return MyGetSpecialFolderPath(CSIDL_APPDATA, true) + "\\Coiledcoin";
 #else
     char* pszHome = getenv("HOME");
     if (pszHome == NULL || strlen(pszHome) == 0)
@@ -763,10 +763,10 @@ string GetDefaultDataDir()
     // Mac
     strHome += "Library/Application Support/";
     filesystem::create_directory(strHome.c_str());
-    return strHome + "CedarCoin";
+    return strHome + "Coiledcoin";
 #else
     // Unix
-    return strHome + ".cedarcoin";
+    return strHome + ".coiledcoin";
 #endif
 #endif
 }
@@ -816,7 +816,7 @@ string GetDataDir()
 string GetConfigFile()
 {
     namespace fs = boost::filesystem;
-    fs::path pathConfig(GetArg("-conf", "cedarcoin.conf"));
+    fs::path pathConfig(GetArg("-conf", "coiledcoin.conf"));
     if (!pathConfig.is_complete())
         pathConfig = fs::path(GetDataDir()) / pathConfig;
     return pathConfig.string();
@@ -837,7 +837,7 @@ void ReadConfigFile(map<string, string>& mapSettingsRet,
     
     for (pod::config_file_iterator it(streamConfig, setOptions), end; it != end; ++it)
     {
-        // Don't overwrite existing settings so command line settings override cedarcoin.conf
+        // Don't overwrite existing settings so command line settings override coiledcoin.conf
         string strKey = string("-") + it->string_key;
         if (mapSettingsRet.count(strKey) == 0)
             mapSettingsRet[strKey] = it->value[0];
@@ -848,7 +848,7 @@ void ReadConfigFile(map<string, string>& mapSettingsRet,
 string GetPidFile()
 {
     namespace fs = boost::filesystem;
-    fs::path pathConfig(GetArg("-pid", "cedarcoind.pid"));
+    fs::path pathConfig(GetArg("-pid", "coiledcoind.pid"));
     if (!pathConfig.is_complete())
         pathConfig = fs::path(GetDataDir()) / pathConfig;
     return pathConfig.string();
@@ -968,10 +968,10 @@ void AddTimeData(unsigned int ip, int64 nTime)
                 if (!fMatch)
                 {
                     fDone = true;
-                    string strMessage = _("Warning: Please check that your computer's date and time are correct.  If your clock is wrong CedarCoin will not work properly.");
+                    string strMessage = _("Warning: Please check that your computer's date and time are correct.  If your clock is wrong Coiledcoin will not work properly.");
                     strMiscWarning = strMessage;
                     printf("*** %s\n", strMessage.c_str());
-                    boost::thread(boost::bind(ThreadSafeMessageBox, strMessage+" ", string("CedarCoin"), wxOK | wxICON_EXCLAMATION, (wxWindow*)NULL, -1, -1));
+                    boost::thread(boost::bind(ThreadSafeMessageBox, strMessage+" ", string("Coiledcoin"), wxOK | wxICON_EXCLAMATION, (wxWindow*)NULL, -1, -1));
                 }
             }
         }
