@@ -1475,23 +1475,6 @@ bool CBlock::CheckBlock(int nHeight) const
         if (!tx.CheckTransaction())
             return DoS(tx.nDoS, error("CheckBlock() : CheckTransaction failed"));
 
-    // This code should be removed when a compatibility-breaking block chain split has passed.
-    // Compatibility check for old clients that counted sigops differently:
-    int nSigOps = 0;
-    BOOST_FOREACH(const CTransaction& tx, vtx)
-    {
-        BOOST_FOREACH(const CTxIn& txin, tx.vin)
-        {
-            nSigOps += txin.scriptSig.GetSigOpCount();
-        }
-        BOOST_FOREACH(const CTxOut& txout, tx.vout)
-        {
-            nSigOps += txout.scriptPubKey.GetSigOpCount();
-        }
-    }
-    if (nSigOps > MAX_BLOCK_SIGOPS)
-        return DoS(100, error("CheckBlock() : out-of-bounds SigOpCount"));
-
     // Check merkleroot
     if (hashMerkleRoot != BuildMerkleTree())
         return DoS(100, error("CheckBlock() : hashMerkleRoot mismatch"));
