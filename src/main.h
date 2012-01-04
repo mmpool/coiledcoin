@@ -27,7 +27,6 @@ class CAddress;
 class CInv;
 class CRequestTracker;
 class CNode;
-class CBlockIndex;
 
 class CAuxPow;
 
