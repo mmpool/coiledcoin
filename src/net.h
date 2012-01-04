@@ -159,15 +159,9 @@ public:
         nServices = 0;
         hSocket = hSocketIn;
         vSend.SetType(SER_NETWORK);
-        vSend.SetVersion(0);
+        vSend.SetVersion(209);
         vRecv.SetType(SER_NETWORK);
-        vRecv.SetVersion(0);
-        // Version 0.2 obsoletes 20 Feb 2012
-        if (GetTime() > 1329696000)
-        {
-            vSend.SetVersion(209);
-            vRecv.SetVersion(209);
-        }
+        vRecv.SetVersion(209);
         nLastSend = 0;
         nLastRecv = 0;
         nLastSendEmpty = GetTime();
