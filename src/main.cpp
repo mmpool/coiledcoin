@@ -779,7 +779,7 @@ unsigned int ComputeMinWork(unsigned int nBase, int64 nTime)
 unsigned int static GetNextWorkRequired(const CBlockIndex* pindexLast)
 {
 
-    // Genesis block
+    // Genesis block - FIXME this is wrong (but never used)
     if (pindexLast == NULL)
         return bnProofOfWorkLimit.GetCompact();
 
@@ -1743,6 +1743,7 @@ bool LoadBlockIndex(bool fAllowNew)
         assert(block.hashMerkleRoot == uint256("0x27c55a0fc0f928c076cc98478f05a7e91b049d27424d904496b8cfb3781b0bf1"));
         block.print();
         assert(block.GetHash() == hashGenesisBlock);
+        assert(CheckProofOfWork(hashGenesisBlock, block.nBits));
 
         // Start new block file
         unsigned int nFile;
