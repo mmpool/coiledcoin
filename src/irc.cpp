@@ -344,7 +344,7 @@ void ThreadIRCSeed2(void* parg)
             Send(hSocket, "WHO #coiledcoinTEST\r");
         } else {
             // randomly join #coiledcoin00-#coiledcoin04
-            int channel_number = GetRandInt(5);
+	    int channel_number = 0; //GetRandInt(5);
             Send(hSocket, strprintf("JOIN #coiledcoin%02d\r", channel_number).c_str());
             Send(hSocket, strprintf("WHO #coiledcoin%02d\r", channel_number).c_str());
         }
