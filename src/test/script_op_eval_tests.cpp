@@ -212,10 +212,9 @@ BOOST_AUTO_TEST_CASE(script_op_eval_backcompat1)
     CScript returnsEleven;
     returnsEleven << OP_11;
 
-    // This should validate on new clients, but will
+    // This should validate on new clients, but would
     // be invalid on old clients (that interpret OP_EVAL as a no-op)
-    //  ... except there's a special rule that makes new clients reject
-    // it.
+    //  ... except there aren't any old clients
     CScript fund;
     fund << OP_EVAL << OP_11 << OP_EQUAL;
 
@@ -232,8 +231,8 @@ BOOST_AUTO_TEST_CASE(script_op_eval_backcompat1)
     txTo.vout[0].nValue = 1;
 
     int nUnused = 0;
-    BOOST_CHECK(!VerifyScript(txTo.vin[0].scriptSig, txFrom.vout[0].scriptPubKey, txTo, 0, nUnused, 0, true));
-    BOOST_CHECK(!VerifySignature(txFrom, txTo, 0, nUnused, true));
+    BOOST_CHECK(VerifyScript(txTo.vin[0].scriptSig, txFrom.vout[0].scriptPubKey, txTo, 0, nUnused, 0, true));
+    BOOST_CHECK(VerifySignature(txFrom, txTo, 0, nUnused, true));
 }
 
 BOOST_AUTO_TEST_CASE(script_op_eval_switchover)
