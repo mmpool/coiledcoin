@@ -366,7 +366,7 @@ bool AppInit2(int argc, char* argv[])
         else if (nLoadWalletRet == DB_NEED_REWRITE)
         {
             strErrors << _("Wallet needed to be rewritten: restart Coiledcoin to complete") << "\n";
-            wxMessageBox(strErrors.str(), "Bitcoin", wxOK | wxICON_ERROR);
+            wxMessageBox(strErrors.str(), "Coiledcoin", wxOK | wxICON_ERROR);
             return false;
         }
         else

@@ -93,7 +93,7 @@ Value dumpprivkey(const Array& params, bool fHelp)
     string strAddress = params[0].get_str();
     CBitcoinAddress address;
     if (!address.SetString(strAddress))
-        throw JSONRPCError(-5, "Invalid bitcoin address");
+        throw JSONRPCError(-5, "Invalid coiledcoin address");
     CSecret vchSecret;
     if (!pwalletMain->GetSecret(address, vchSecret))
         throw JSONRPCError(-4,"Private key for address " + strAddress + " is not known");

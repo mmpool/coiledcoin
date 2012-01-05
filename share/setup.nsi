@@ -7,7 +7,7 @@ SetCompressor /SOLID lzma
 !define REGKEY "SOFTWARE\$(^Name)"
 !define VERSION 0.5.99
 !define COMPANY "Coiledcoin project"
-!define URL http://www.makomk.com/
+!define URL http://www.coiledcoin.org/
 
 # MUI Symbol Definitions
 !define MUI_ICON "../share/pixmaps/bitcoin.ico"

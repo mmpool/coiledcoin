@@ -29,7 +29,7 @@ public:
     static void setupAddressWidget(QLineEdit *widget, QWidget *parent);
     static void setupAmountWidget(QLineEdit *widget, QWidget *parent);
 
-    // Parse "bitcoin:" URL into recipient object, return true on succesful parsing
+    // Parse "coiledcoin:" URL into recipient object, return true on succesful parsing
     // See Bitcoin URL definition discussion here: https://bitcointalk.org/index.php?topic=33490.0
     static bool parseBitcoinURL(const QUrl *url, SendCoinsRecipient *out);
 
