@@ -1040,9 +1040,6 @@ public:
     unsigned int nBits;
     unsigned int nNonce;
 
-    // if this is an aux work block
-    boost::shared_ptr<CAuxPow> auxpow;
-
     CBlockIndex()
     {
         phashBlock = NULL;
@@ -1058,7 +1055,6 @@ public:
         nTime          = 0;
         nBits          = 0;
         nNonce         = 0;
-        auxpow.reset();
     }
 
     CBlockIndex(unsigned int nFileIn, unsigned int nBlockPosIn, CBlock& block)
@@ -1076,22 +1072,9 @@ public:
         nTime          = block.nTime;
         nBits          = block.nBits;
         nNonce         = block.nNonce;
-        auxpow         = block.auxpow;
     }
 
-    CBlock GetBlockHeader() const
-    {
-        CBlock block;
-        block.nVersion       = nVersion;
-        if (pprev)
-            block.hashPrevBlock = pprev->GetBlockHash();
-        block.hashMerkleRoot = hashMerkleRoot;
-        block.nTime          = nTime;
-        block.nBits          = nBits;
-        block.nNonce         = nNonce;
-        block.auxpow         = auxpow;
-        return block;
-    }
+    CBlock GetBlockHeader() const;
 
     uint256 GetBlockHash() const
     {
@@ -1116,8 +1099,6 @@ public:
     {
         return (pnext || this == pindexBest);
     }
-
-    bool CheckIndex() const;
 
     bool EraseBlockFromDisk()
     {
@@ -1183,16 +1164,22 @@ public:
     uint256 hashPrev;
     uint256 hashNext;
 
+    // if this is an aux work block
+    boost::shared_ptr<CAuxPow> auxpow;
+
     CDiskBlockIndex()
     {
         hashPrev = 0;
         hashNext = 0;
+        auxpow.reset();
     }
 
-    explicit CDiskBlockIndex(CBlockIndex* pindex) : CBlockIndex(*pindex)
+    explicit CDiskBlockIndex(CBlockIndex* pindex, boost::shared_ptr<CAuxPow> auxpow) : CBlockIndex(*pindex)
     {
         hashPrev = (pprev ? pprev->GetBlockHash() : 0);
         hashNext = (pnext ? pnext->GetBlockHash() : 0);
+        this->auxpow = auxpow;
+
     }
 
     IMPLEMENT_SERIALIZE
@@ -1216,6 +1203,8 @@ public:
         ReadWriteAuxPow(s, auxpow, nType, this->nVersion, ser_action);
     )
 
+    bool CheckIndex() const;
+
     uint256 GetBlockHash() const
     {
         CBlock block;
@@ -1229,7 +1218,8 @@ public:
     }
 
 
-    std::string ToString() const
+    std::string ToString() const;
+/*
     {
         std::string str = "CDiskBlockIndex(";
         str += CBlockIndex::ToString();
@@ -1239,7 +1229,7 @@ public:
             hashNext.ToString().substr(0,20).c_str());
         return str;
     }
-
+*/
     void print() const
     {
         printf("%s\n", ToString().c_str());

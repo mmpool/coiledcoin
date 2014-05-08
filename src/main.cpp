@@ -711,6 +711,7 @@ bool CBlock::ReadFromDisk(const CBlockIndex* pindex, bool fReadTransactions)
         *this = pindex->GetBlockHeader();
         return true;
     }
+
     if (!ReadFromDisk(pindex->nFile, pindex->nBlockPos, fReadTransactions))
         return false;
     if (GetHash() != pindex->GetBlockHash())
@@ -1127,7 +1128,10 @@ bool CBlock::DisconnectBlock(CTxDB& txdb, CBlockIndex* pindex)
     // The memory index structure will be changed after the db commits.
     if (pindex->pprev)
     {
-        CDiskBlockIndex blockindexPrev(pindex->pprev);
+	CBlock block;
+        if (!block.ReadFromDisk(pindex->pprev))
+            return error("DisconnectBlock() : ReadFromDisk for disconnect failed");
+        CDiskBlockIndex blockindexPrev(pindex->pprev, block.auxpow);
         blockindexPrev.hashNext = 0;
         if (!txdb.WriteBlockIndex(blockindexPrev))
             return error("DisconnectBlock() : WriteBlockIndex failed");
@@ -1176,7 +1180,10 @@ bool CBlock::ConnectBlock(CTxDB& txdb, CBlockIndex* pindex)
     // The memory index structure will be changed after the db commits.
     if (pindex->pprev)
     {
-        CDiskBlockIndex blockindexPrev(pindex->pprev);
+        CBlock block;
+        if (!block.ReadFromDisk(pindex->pprev))
+            return error("ConnectBlock() : ReadFromDisk for connect failed");
+        CDiskBlockIndex blockindexPrev(pindex->pprev, block.auxpow);
         blockindexPrev.hashNext = pindex->GetBlockHash();
         if (!txdb.WriteBlockIndex(blockindexPrev))
             return error("ConnectBlock() : WriteBlockIndex failed");
@@ -1338,7 +1345,8 @@ bool CBlock::SetBestChain(CTxDB& txdb, CBlockIndex* pindexNew)
     bnBestChainWork = pindexNew->bnChainWork;
     nTimeBestReceived = GetTime();
     nTransactionsUpdated++;
-    printf("SetBestChain: new best=%s  height=%d  work=%s\n", hashBestChain.ToString().substr(0,20).c_str(), nBestHeight, bnBestChainWork.ToString().c_str());
+    printf("SetBestChain: new best=%s  height=%d date=%s work=%s\n", hashBestChain.ToString().substr(0,20).c_str(), nBestHeight, DateTimeStrFormat("%x %H:%M:%S", GetBlockTime()).c_str(), bnBestChainWork.ToString().c_str());
+
 
     return true;
 }
@@ -1367,7 +1375,7 @@ bool CBlock::AddToBlockIndex(unsigned int nFile, unsigned int nBlockPos)
 
     CTxDB txdb;
     txdb.TxnBegin();
-    txdb.WriteBlockIndex(CDiskBlockIndex(pindexNew));
+    txdb.WriteBlockIndex(CDiskBlockIndex(pindexNew, this->auxpow));
     if (!txdb.TxnCommit())
         return false;
 
@@ -3389,7 +3397,7 @@ void GenerateBitcoins(bool fGenerate, CWallet* pwallet)
     }
 }
 
-bool CBlockIndex::CheckIndex() const
+bool CDiskBlockIndex::CheckIndex() const
 {
     if (nVersion & BLOCK_VERSION_AUXPOW)
         return CheckProofOfWork(auxpow->GetParentBlockHash(), nBits);
@@ -3399,10 +3407,53 @@ bool CBlockIndex::CheckIndex() const
 
 std::string CBlockIndex::ToString() const
 {
-    return strprintf("CBlockIndex(nprev=%08x, pnext=%08x, nFile=%d, nBlockPos=%-6d nHeight=%d, merkle=%s, hashBlock=%s, hashParentBlock=%s)",
+    return strprintf("CBlockIndex(nprev=%08x, pnext=%08x, nFile=%d, nBlockPos=%-6d nHeight=%d, merkle=%s, hashBlock=%s)",
             pprev, pnext, nFile, nBlockPos, nHeight,
             hashMerkleRoot.ToString().substr(0,10).c_str(),
-            GetBlockHash().ToString().substr(0,20).c_str(),
-            (auxpow.get() != NULL) ? auxpow->GetParentBlockHash().ToString().substr(0,20).c_str() : "-"
+            GetBlockHash().ToString().substr(0,20).c_str()
             );
 }
+
+std::string CDiskBlockIndex::ToString() const
+{
+    std::string str = "CDiskBlockIndex(";
+    str += CBlockIndex::ToString();
+    str += strprintf("\n                hashBlock=%s, hashPrev=%s, hashParentBlock=%s)",
+        GetBlockHash().ToString().c_str(),
+        hashPrev.ToString().c_str(),
+        (auxpow.get() != NULL) ? auxpow->GetParentBlockHash().ToString().substr(0,20).c_str() : "-");
+    return str;
+}         
+
+CBlock CBlockIndex::GetBlockHeader() const
+{
+    CBlock block;
+  
+    if (nVersion & BLOCK_VERSION_AUXPOW) {
+/*
+        CDiskBlockIndex diskblockindex;
+        // auxpow is not in memory, load CDiskBlockHeader
+        // from database to get it
+  
+        pblocktree->ReadDiskBlockIndex(*phashBlock, diskblockindex);
+        block.auxpow = diskblockindex.auxpow;
+*/
+	CBlock block2;
+        if (!block2.ReadFromDisk(this))
+          error("ReadFromDisk failed");
+
+        block.auxpow = block2.auxpow;
+
+    }
+
+    block.nVersion       = nVersion;
+    if (pprev)
+        block.hashPrevBlock = pprev->GetBlockHash();
+    block.hashMerkleRoot = hashMerkleRoot;
+    block.nTime          = nTime;
+    block.nBits          = nBits;
+    block.nNonce         = nNonce;
+    return block;
+}
+ 
+
